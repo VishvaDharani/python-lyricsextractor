@@ -1,0 +1,57 @@
+Python 3.12.0 (tags/v3.12.0:0fb18b0, Oct  2 2023, 13:03:39) [MSC v.1935 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import tkinter as tk
+>>> from tkinter import scrolledtext
+>>> import lyricsgenius
+>>>
+>>> GENIUS_API_TOKEN = 'wCWYFHKkCi4qK7JpK8ONnawfmohj_8WsitKqhuK6od-QuMaDQmmcb-ts0f0AhyEP'
+>>>
+>>> genius = lyricsgenius.Genius(GENIUS_API_TOKEN)
+>>>
+>>> def get_lyrics():
+...     artist = artist_entry.get()
+...     song = song_entry.get()
+...
+...     try:
+...         song_info = genius.search_song(song, artist)
+...         if song_info:
+...             lyrics = song_info.lyrics
+...             lyrics_text.config(state=tk.NORMAL)
+...             lyrics_text.delete(1.0, tk.END)
+...             lyrics_text.insert(tk.END, lyrics)
+...             lyrics_text.config(state=tk.DISABLED)
+...         else:
+...             lyrics_text.config(state=tk.NORMAL)
+...             lyrics_text.delete(1.0, tk.END)
+...             lyrics_text.insert(tk.END, "Sorry, lyrics not found.")
+...             lyrics_text.config(state=tk.DISABLED)
+...     except Exception as e:
+...         lyrics_text.config(state=tk.NORMAL)
+...         lyrics_text.delete(1.0, tk.END)
+...         lyrics_text.insert(tk.END, f"Error: {str(e)}")
+...         lyrics_text.config(state=tk.DISABLED)
+...
+>>> # Set up the GUI
+>>> root = tk.Tk()
+>>> root.title("Lyrics Extractor")
+''
+>>>
+>>> # Labels and entries for artist and song name
+>>> tk.Label(root, text="Artist Name:").grid(row=0, column=0, padx=10, pady=10)
+>>> artist_entry = tk.Entry(root, width=30)
+>>> artist_entry.grid(row=0, column=1, padx=10, pady=10)
+>>>
+>>> tk.Label(root, text="Song Title:").grid(row=1, column=0, padx=10, pady=10)
+>>> song_entry = tk.Entry(root, width=30)
+>>> song_entry.grid(row=1, column=1, padx=10, pady=10)
+>>>
+>>> # Button to fetch lyrics
+>>> fetch_button = tk.Button(root, text="Get Lyrics", command=get_lyrics)
+>>> fetch_button.grid(row=2, column=0, columnspan=2, pady=10)
+>>>
+>>> # ScrolledText widget to display lyrics
+>>> lyrics_text = scrolledtext.ScrolledText(root, wrap=tk.WORD, width=60, height=20, state=tk.DISABLED)
+>>> lyrics_text.grid(row=3, column=0, columnspan=2, padx=10, pady=10)
+>>>
+>>> root.mainloop()
+>>>
